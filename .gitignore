@@ -1,0 +1,9 @@
+# Fichier .gitignore
+# Ignore les fichiers générés par Terraform et les fichiers d'état sensibles
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tfjson

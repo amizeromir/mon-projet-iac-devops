@@ -1,0 +1,56 @@
+# .github/workflows/deploy-app.yml
+
+name: Deploiement Statique vers Azure Storage
+
+# Le bloc 'permissions' est délibérément OMIT pour FORCER l'utilisation du Service Principal
+# (Ceci est la clé pour éviter l'erreur AADSTS70025 OIDC)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Vérification du code (Checkout)
+      # Ajout de 'contents: read' pour s'assurer que l'action a les permissions minimales
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          # Assurez-vous d'avoir les permissions de lecture
+          fetch-depth: 0 
+
+      # 2. Connexion sécurisée à Azure
+      - name: Azure Login
+        uses: azure/login@v1.4.6
+        with:
+          # CORRECTION 1: Utilisation du tiret du bas
+          #auth-type: SERVICE_PRINCIPAL
+          # CORRECTION 2: Force l'utilisation du Service Principal basé sur secrets
+          #enable-AzPSSession: true
+          
+          # On utilise le nouveau secret JSON complet
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # 3. Déploiement de l'Application
+      - name: Upload Index File to Static Website
+        run: |
+          # Variable pour le nom du compte de stockage (vérifiez le nom si vous l'avez changé)
+          STORAGE_ACCOUNT_NAME="iacprojectstgd56f87d5" 
+          
+          # La commande az CLI automatisée
+          az storage blob upload \
+            --account-name $STORAGE_ACCOUNT_NAME \
+            --container-name '$web' \
+            --file index.html \
+            --name index.html \
+            --overwrite true 
+
+      # 4. Déconnexion
+      - name: Logout
+        run: |
+          az logout
+ 
