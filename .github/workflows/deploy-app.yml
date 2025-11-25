@@ -39,7 +39,7 @@ jobs:
       - name: Upload Index File to Static Website
         run: |
           # Variable pour le nom du compte de stockage (vérifiez le nom si vous l'avez changé)
-          STORAGE_ACCOUNT_NAME="iacprojectstgd56f87d5" 
+          STORAGE_ACCOUNT_NAME="iacprojectstg649803e6" 
           
           # La commande az CLI automatisée
           az storage blob upload \
