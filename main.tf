@@ -55,15 +55,7 @@ resource "azurerm_storage_account" "sa" {
 resource "azurerm_storage_account_static_website" "static_web" {
   storage_account_id = azurerm_storage_account.sa.id
   
-
-} 
-
-resource "azurerm_storage_account_static_website" "static_web" {
-  storage_account_id = azurerm_storage_account.sa.id
-  
-
-
-  # Le nom du fichier d'accueil (page d'index)
+ # Le nom du fichier d'accueil (page d'index)
   index_document       = "index.html" 
   # Le nom du fichier d'erreur 404
   error_404_document   = "404.html"
